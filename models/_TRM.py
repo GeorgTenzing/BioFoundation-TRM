@@ -8,7 +8,7 @@ class TCN(nn.Module):
                  dilations: list = [1, 2, 4, 8],
                  kernel_size: int = 3,
                  in_channels: int = 6,
-                 num_classes: int = 6,):
+                 num_classes: int = 4,):
         super().__init__()
         
         self.hidden_tcn  = hidden_tcn

@@ -78,10 +78,17 @@ input_normalization:
   quartile_normalization_upper_val:  20
 
 
+# defaults:
+#   - _self_
+#   - data_module: pretrain_data_module
+#   - task: pretrain_task
+#   - scheduler: multi_step_lr
+#   - model: FEMBA_pretrain
+#   - criterion: pretrain_criterion
 defaults:
   - _self_
-  - data_module: pretrain_data_module
-  - task: pretrain_task
+  - data_module: _uea_basicmotions
+  - model: _TRM
   - scheduler: multi_step_lr
-  - model: FEMBA_pretrain
+  - task: _classification_task_TRM
   - criterion: pretrain_criterion
