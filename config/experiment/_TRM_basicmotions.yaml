@@ -1,0 +1,11 @@
+defaults:
+  - override /data_module: _basicmotions_finetune
+  - override /task: _finetune_task_TRM
+  - override /model: _TRM_base
+  - override /criterion: finetune_criterion
+  - override /scheduler: cosine
+  - _self_
+
+tag: basicmotions_trm
+batch_size: 64
+num_workers: 8
