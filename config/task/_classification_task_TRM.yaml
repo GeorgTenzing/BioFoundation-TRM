@@ -1,0 +1,2 @@
+task:
+  _target_: 'tasks._classification_task_TRM.ClassificationTask'

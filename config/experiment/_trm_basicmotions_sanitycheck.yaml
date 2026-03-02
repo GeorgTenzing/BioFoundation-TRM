@@ -1,0 +1,8 @@
+tag: trm_basicmotions_sanitycheck
+
+defaults:
+  - override /data_module: _uea_basicmotions
+  - override /model: _TRM_base
+  - override /scheduler: multi_step_lr
+  - override /task: _classification_task_TRM
+  - override /criterion: pretrain_criterion
