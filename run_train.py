@@ -37,18 +37,6 @@ from pytorch_lightning.strategies import DDPStrategy
 
 from util.train_utils import find_last_checkpoint_path
 
-# CHANGED:
-import warnings
-warnings.filterwarnings("ignore", message="Future Hydra versions will no longer change working directory*")
-warnings.filterwarnings("ignore", message="`isinstance\\(treespec, LeafSpec\\)` is deprecated*")
-warnings.filterwarnings("ignore", message="No positive samples in targets*")
-warnings.filterwarnings("ignore", message="No negative samples in targets*")
-warnings.filterwarnings("ignore", message="Average precision score for one or more classes was `nan`*")
-warnings.filterwarnings("ignore", message="No positive samples found in target, recall is undefined*")
-log = logging.getLogger("pytorch_lightning")
-log.propagate = False
-log.setLevel(logging.ERROR)
-
 
 for env_var in ["DATA_PATH", "CHECKPOINT_DIR"]:
     env_var_value = os.environ.get(env_var)
@@ -62,7 +50,6 @@ logger: Logger = logging.getLogger(__name__)
 
 # Set float32 matmul precision to high for better performance on supported hardware
 torch.set_float32_matmul_precision("high")
-
 
 
 def train(cfg: DictConfig):
@@ -155,9 +142,7 @@ def train(cfg: DictConfig):
 
     if cfg.final_validate:
         print("===> Start validation")
-        # trainer.validate(model, data_module, ckpt_path=best_ckpt)
-        # CHANGED
-        trainer.validate(model, data_module, ckpt_path=best_ckpt, weights_only=False)
+        trainer.validate(model, data_module, ckpt_path=best_ckpt)
 
     if cfg.final_test:
         # rank 0 only
@@ -198,9 +183,7 @@ def _run_test(
         devices=1,
     )
     print("===> Start testing")
-    # test_results = trainer.test(module, datamodule=datamodule, ckpt_path=last_ckpt)
-    # Changed
-    test_results = trainer.test(module, datamodule=datamodule, ckpt_path=last_ckpt, weights_only=False)
+    test_results = trainer.test(module, datamodule=datamodule, ckpt_path=last_ckpt)
     results["test_metrics"] = test_results
     return results, trainer
 

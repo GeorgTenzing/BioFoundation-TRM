@@ -9,8 +9,8 @@ batch_size: 16
 io:
   # checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
   # base_output_path: ${env:DATA_PATH}/outputs
-  checkpoint_dirpath: $/home/gtenzing/BioFoundation-TRM/trm/checkpoints
-  base_output_path: $/home/gtenzing/BioFoundation-TRM/trm/outputs
+  checkpoint_dirpath: '/home/gtenzing/BioFoundation-TRM/trm/checkpoints'
+  base_output_path: '/home/gtenzing/BioFoundation-TRM/trm/outputs'
   version: 0
 
 defaults:

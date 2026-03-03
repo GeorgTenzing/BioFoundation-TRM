@@ -50,10 +50,10 @@ log.propagate = False
 log.setLevel(logging.ERROR)
 
 
-for env_var in ["DATA_PATH", "CHECKPOINT_DIR"]:
-    env_var_value = os.environ.get(env_var)
-    if env_var_value is None or env_var_value == "#CHANGEME":
-        raise RuntimeError(f"Environment variable {env_var} is not set. Please set it before running the script.")
+# for env_var in ["DATA_PATH", "CHECKPOINT_DIR"]:
+#     env_var_value = os.environ.get(env_var)
+#     if env_var_value is None or env_var_value == "#CHANGEME":
+#         raise RuntimeError(f"Environment variable {env_var} is not set. Please set it before running the script.")
 
 OmegaConf.register_new_resolver("env", lambda key: os.getenv(key))
 OmegaConf.register_new_resolver("get_method", hydra.utils.get_method)
