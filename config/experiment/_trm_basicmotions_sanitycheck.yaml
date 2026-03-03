@@ -4,6 +4,7 @@ tag: trm_basicmotions_sanitycheck
 classification_type: "mcc"
 final_validate: True
 final_test: True
+batch_size: 16
 
 io:
   checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints

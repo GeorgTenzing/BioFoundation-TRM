@@ -50,6 +50,17 @@ logger: Logger = logging.getLogger(__name__)
 # Set float32 matmul precision to high for better performance on supported hardware
 torch.set_float32_matmul_precision("high")
 
+# CHANGED:
+import warnings
+warnings.filterwarnings("ignore", message="Future Hydra versions will no longer change working directory*")
+warnings.filterwarnings("ignore", message="`isinstance\\(treespec, LeafSpec\\)` is deprecated*")
+warnings.filterwarnings("ignore", message="No positive samples in targets*")
+warnings.filterwarnings("ignore", message="No negative samples in targets*")
+warnings.filterwarnings("ignore", message="Average precision score for one or more classes was `nan`*")
+warnings.filterwarnings("ignore", message="No positive samples found in target, recall is undefined*")
+# logging.getLogger("pytorch_lightning").setLevel(logging.ERROR)
+# logging.getLogger("lightning").setLevel(logging.ERROR)
+# logging.getLogger("lightning.pytorch").setLevel(logging.ERROR)
 
 def train(cfg: DictConfig):
     seed_everything(cfg.seed)

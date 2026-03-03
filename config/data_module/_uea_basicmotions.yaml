@@ -12,9 +12,8 @@ data_module:
   val:
     _target_: datasets.hdf5_dataset.HDF5Loader
     finetune: True
+    hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/val.h5'
+  test:
+    _target_: datasets.hdf5_dataset.HDF5Loader  
+    finetune: True
     hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/test.h5'
-
-  # test:
-  #   _target_: datasets.hdf5_dataset.HDF5Loader  
-  #   finetune: True
-  #   hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/test.h5'
