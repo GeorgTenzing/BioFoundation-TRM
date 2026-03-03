@@ -24,11 +24,11 @@ callbacks:
     refresh_rate: 10
 io:
   version: 0
-  base_output_path: /home/gtenzing/BioFoundation-TRM/trm/outputs
-  checkpoint_dirpath: /home/gtenzing/BioFoundation-TRM/trm/checkpoints
+  base_output_path: /home/gtenzing/BioFoundation-TRM/trm/runs/outputs
+  checkpoint_dirpath: /home/gtenzing/BioFoundation-TRM/trm/runs/checkpoints
 trainer:
-  num_nodes: ${num_nodes}
-  devices: ${gpus}
+  num_nodes: 1
+  devices: 1
   strategy: auto
   max_epochs: 5
   max_steps: 500000
@@ -54,8 +54,8 @@ data_module:
   _target_: data_module.finetune_data_module.FinetuneDataModule
   name: uea_basicmotions
   cfg:
-    num_workers: ${num_workers}
-    batch_size: ${batch_size}
+    num_workers: 2
+    batch_size: 16
   train:
     _target_: datasets.hdf5_dataset.HDF5Loader
     finetune: true

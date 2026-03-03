@@ -141,7 +141,7 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: /home/gtenzing/BioFoundation-TRM/trm/outputs/2026-03-03/22-49-59
+    output_dir: /home/gtenzing/BioFoundation-TRM/trm/outputs/2026-03-03/22-58-30
     choices:
       experiment: _trm_basicmotions_sanitycheck
       criterion: finetune_criterion
