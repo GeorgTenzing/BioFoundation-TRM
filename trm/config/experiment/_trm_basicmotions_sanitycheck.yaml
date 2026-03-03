@@ -1,0 +1,40 @@
+#@package _global_
+tag: trm_basicmotions_sanitycheck
+
+classification_type: "mcc"
+final_validate: True
+final_test: True
+batch_size: 16
+
+io:
+  # checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
+  # base_output_path: ${env:DATA_PATH}/outputs
+  checkpoint_dirpath: $/home/gtenzing/BioFoundation-TRM/trm/checkpoints
+  base_output_path: $/home/gtenzing/BioFoundation-TRM/trm/outputs
+  version: 0
+
+defaults:
+  - override /data_module: _uea_basicmotions
+  - override /model: _TRM
+  - override /scheduler: multi_step_lr
+  - override /task: _classification_task_TRM 
+  - override /criterion: finetune_criterion
+
+
+optimizer:
+  optim: AdamW
+  lr: 1e-4
+
+trainer:
+  accelerator: auto 
+  max_epochs: 5
+  log_every_n_steps: 1
+  val_check_interval: 1.0 # controls whether to use epoch-based or step-based training
+
+
+model:
+  num_classes: 4
+
+model_checkpoint:
+  monitor: "val_MulticlassAccuracy"
+  mode: "max"

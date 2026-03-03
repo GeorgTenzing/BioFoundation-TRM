@@ -1,0 +1,25 @@
+#@package _global_
+data_module:
+  _target_: 'data_module.finetune_data_module.FinetuneDataModule'
+  name: "uea_basicmotions"
+  cfg:
+    num_workers: ${num_workers}
+    batch_size: ${batch_size}
+  train:
+    _target_: 'datasets.hdf5_dataset.HDF5Loader'
+    finetune: True
+    # hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/train.h5'
+    hdf5_file: '/home/gtenzing/BioFoundation-TRM/trm/make_datasets/Datasets/UEA/BasicMotions/processed/train.h5'
+
+  val:
+    _target_: datasets.hdf5_dataset.HDF5Loader
+    finetune: True
+    # hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/val.h5'
+    hdf5_file: '/home/gtenzing/BioFoundation-TRM/trm/make_datasets/Datasets/UEA/BasicMotions/processed/val.h5'
+
+  test:
+    _target_: datasets.hdf5_dataset.HDF5Loader  
+    finetune: True
+    # hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/test.h5'
+    hdf5_file: '/home/gtenzing/BioFoundation-TRM/trm/make_datasets/Datasets/UEA/BasicMotions/processed/test.h5'
+

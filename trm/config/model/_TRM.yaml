@@ -1,0 +1,5 @@
+# @package _global_ 
+model:
+  _target_: models._TRM.TCN
+    # _target_: models._TRM.TRM
+  # num_classes: 4
