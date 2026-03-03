@@ -1,0 +1,199 @@
+tag: FEMBA_pretrain
+gpus: 4
+num_nodes: 1
+num_workers: 8
+batch_size: 256
+seed: 42
+resume: true
+pretrained_checkpoint: null
+load_state_dict: false
+training: true
+print_model: true
+find_unused_parameters: false
+model_checkpoint:
+  save_last: true
+  save_top_k: 1
+  monitor: val_psnr
+  mode: max
+callbacks:
+  lr_monitor:
+    _target_: pytorch_lightning.callbacks.LearningRateMonitor
+    logging_interval: step
+  progress_bar:
+    _target_: pytorch_lightning.callbacks.TQDMProgressBar
+    refresh_rate: 10
+io:
+  version: 0
+  base_output_path: '#CHANGEME'
+  checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
+trainer:
+  num_nodes: ${num_nodes}
+  devices: ${gpus}
+  strategy: auto
+  max_epochs: null
+  max_steps: 500000
+  benchmark: true
+  log_every_n_steps: 50
+  check_val_every_n_epoch: 1
+  val_check_interval: null
+  num_sanity_val_steps: 0
+optimizer:
+  optim: LAMB
+  lr: 0.0001
+masking:
+  patch_size:
+  - 2
+  - 16
+  masking_ratio: 0.6
+input_normalization:
+  normalize: true
+  quartile_normalization_lower_val: -20
+  quartile_normalization_upper_val: 20
+data_module:
+  _target_: data_module.pretrain_data_module.PretrainDataModule
+  name: eeg
+  cfg:
+    num_workers: ${num_workers}
+    batch_size: ${batch_size}
+  test: null
+  train_val_split_ratio: 0.8
+  datasets:
+    demo_dataset: null
+    TUEG_22_channels_0:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_10:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_11:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_12:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_13:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_14:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_16:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_17:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_18:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_19:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_1:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_20:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_23:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_24:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_31:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_3:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_4:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_5:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_15:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_21:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_22:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_25:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_26:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_27:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_28:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_29:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_2:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_30:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+    TUEG_22_channels_6:
+      _target_: datasets.hdf5_dataset.HDF5Loader
+      finetune: false
+      hdf5_file: '#CHANGEME'
+task:
+  _target_: tasks.pretrain_task.MaskTask
+scheduler:
+  _target_: schedulers.multi_step_lr.multi_step_lr
+  milestones: 200000+400000
+  gamma: 0.5
+  warmup_iter: -1
+  warmup_init_lr: 0
+model:
+  _target_: models.FEMBA.FEMBA
+  seq_length: 1280
+  num_channels: 22
+  exp: 4
+  num_classes: 0
+  num_blocks: 4
+  embed_dim: 79
+criterion:
+  _target_: criterion.pretrain_criterion.PretrainCriterion
+  loss_type: smooth_l1
+final_validate: true
+final_test: false
+pretrained_checkpoint_path: null

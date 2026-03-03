@@ -67,6 +67,13 @@ def train(cfg: DictConfig):
     # DataLoader
     print("===> Loading datasets")
     data_module = hydra.utils.instantiate(cfg.data_module)
+    # CHANGED
+    # print("INSTANTIATED data_module:", type(data_module))
+    # data_module.setup("fit")
+    # dl = data_module.train_dataloader()
+    # b = next(iter(dl))
+    # print("MANUAL BATCH TYPE:", type(b))
+    # print("MANUAL BATCH:", "tuple len="+str(len(b)) if isinstance(b, tuple) else b)
 
     # Pytorch Lightning module
     print("===> Start building model")
@@ -128,7 +135,15 @@ def train(cfg: DictConfig):
     results: dict = {}
     if cfg.training:
         print("===> Start training")
+        # CHANGED
+        print("TYPE cfg:", type(cfg))
+        print("TYPE cfg.data_module:", type(cfg.data_module))
+        print("TYPE instantiated data_module:", type(data_module))
         trainer.fit(model, data_module, ckpt_path=last_ckpt)
+
+
+
+
 
     best_ckpt = model_checkpoint.best_model_path
 

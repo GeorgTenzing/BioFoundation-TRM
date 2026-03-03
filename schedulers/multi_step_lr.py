@@ -66,8 +66,11 @@ class MultiStepLRWarmup(MultiStepLR):
         """
         self.warmup_iter = warmup_iter
         self.warmup_init_lr = warmup_init_lr
+        # super(MultiStepLRWarmup, self).__init__(
+        #     optimizer, milestones, gamma, last_epoch, verbose
+        # )
         super(MultiStepLRWarmup, self).__init__(
-            optimizer, milestones, gamma, last_epoch, verbose
+            optimizer, milestones, gamma, last_epoch
         )
 
     def get_lr(self):

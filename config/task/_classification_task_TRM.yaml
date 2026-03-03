@@ -1,2 +1,3 @@
+# @package _global_
 task:
   _target_: 'tasks._classification_task_TRM.ClassificationTask'

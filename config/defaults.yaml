@@ -51,6 +51,8 @@ callbacks:
 io:
   version: 0
   base_output_path: "#CHANGEME"
+  # checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
+  # base_output_path: ${env:DATA_PATH}/outputs
 
 trainer:
   num_nodes: ${num_nodes}
@@ -78,17 +80,10 @@ input_normalization:
   quartile_normalization_upper_val:  20
 
 
-# defaults:
-#   - _self_
-#   - data_module: pretrain_data_module
-#   - task: pretrain_task
-#   - scheduler: multi_step_lr
-#   - model: FEMBA_pretrain
-#   - criterion: pretrain_criterion
 defaults:
   - _self_
-  - data_module: _uea_basicmotions
-  - model: _TRM
+  - data_module: pretrain_data_module
+  - task: pretrain_task
   - scheduler: multi_step_lr
-  - task: _classification_task_TRM
+  - model: FEMBA_pretrain
   - criterion: pretrain_criterion

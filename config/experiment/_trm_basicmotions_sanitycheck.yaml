@@ -1,14 +1,29 @@
+#@package _global_
 tag: trm_basicmotions_sanitycheck
 
+pretrained_checkpoint_path: null
 io:
   checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
   base_output_path: ${env:DATA_PATH}/outputs
   version: 0
 
-# defaults:
-#   - _self_
-#   - override /data_module: _uea_basicmotions
-#   - override /model: _TRM
-#   - override /scheduler: multi_step_lr
-#   - override /task: _classification_task_TRM
-#   - override /criterion: pretrain_criterion
+defaults:
+  - override /data_module: _uea_basicmotions
+  - override /model: _TRM
+  - override /scheduler: multi_step_lr
+  # - override /task: finetune_task
+  - override /task: _classification_task_TRM 
+  - override /criterion: finetune_criterion
+
+
+optimizer:
+  optim: AdamW
+  lr: 1e-4
+
+trainer:
+  log_every_n_steps: 1
+
+model:
+  num_classes: 4
+
+classification_type: "mcc"
