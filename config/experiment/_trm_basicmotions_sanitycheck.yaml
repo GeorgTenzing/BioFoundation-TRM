@@ -1,7 +1,6 @@
 #@package _global_
 tag: trm_basicmotions_sanitycheck
 
-pretrained_checkpoint_path: null
 io:
   checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
   base_output_path: ${env:DATA_PATH}/outputs
@@ -11,7 +10,6 @@ defaults:
   - override /data_module: _uea_basicmotions
   - override /model: _TRM
   - override /scheduler: multi_step_lr
-  # - override /task: finetune_task
   - override /task: _classification_task_TRM 
   - override /criterion: finetune_criterion
 
@@ -21,9 +19,16 @@ optimizer:
   lr: 1e-4
 
 trainer:
+  max_epochs: 5
   log_every_n_steps: 1
+  val_check_interval: 1.0 # controls whether to use epoch-based or step-based training
+
 
 model:
   num_classes: 4
 
 classification_type: "mcc"
+
+model_checkpoint:
+  monitor: "val_loss"
+  mode: "min"

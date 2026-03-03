@@ -1,6 +1,5 @@
 #@package _global_
 data_module:
-  # _target_: 'data_module.pretrain_data_module.PretrainDataModule'
   _target_: 'data_module.finetune_data_module.FinetuneDataModule'
   name: "uea_basicmotions"
   cfg:
@@ -15,23 +14,7 @@ data_module:
     finetune: True
     hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/test.h5'
 
-    # BasicMotions_val:
-    #   _target_: datasets.hdf5_dataset.HDF5Loader
-    #   finetune: True
-    #   hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/val.h5'
-      
-
   # test:
-  #   _target_: datasets.hdf5_dataset.HDF5Loader
-  #   finetune: False
+  #   _target_: datasets.hdf5_dataset.HDF5Loader  
+  #   finetune: True
   #   hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/test.h5'
-
-  # train:
-  #   _target_: datasets.hdf5_dataset.HDF5Loader
-  #   finetune: False
-  #   hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/train.h5'
-
-  # val:
-  #   _target_: datasets.hdf5_dataset.HDF5Loader
-  #   finetune: False
-  #   hdf5_file: '${env:DATA_PATH}/make_datasets/Datasets/UEA/BasicMotions/processed/val.h5'

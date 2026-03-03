@@ -51,9 +51,9 @@ class ClassificationTask(pl.LightningModule):
 
         # Loss function
         self.criterion = nn.CrossEntropyLoss()
-        self.classification_task = "multiclass"
-
+        
         # Metrics
+        self.classification_task = "multiclass"
         label_metrics = MetricCollection([
             Accuracy(task=self.classification_task, num_classes=self.num_classes, average="macro"),
             Recall(task='multiclass', num_classes=self.num_classes, average="macro"),
@@ -109,21 +109,10 @@ class ClassificationTask(pl.LightningModule):
     
 
     def _step(self, X):
-        """
-        Perform forward pass and post-process predictions.
-
-        Args:
-            X (torch.Tensor): Input tensor.
-            mask (torch.Tensor): Attention mask tensor.
-
-        Returns:
-            dict: Dictionary containing predicted labels, probabilities, and logits.
-        """
         y_pred_logits = self.model(X)
 
-        if self.classification_type in ("bc", "mcc", "ml"):
-            y_pred_probs = torch.softmax(y_pred_logits, dim=1)
-            y_pred_label = torch.argmax(y_pred_probs, dim=1)
+        y_pred_probs = torch.softmax(y_pred_logits, dim=1)
+        y_pred_label = torch.argmax(y_pred_probs, dim=1)
 
         return {
             'label': y_pred_label,
@@ -176,12 +165,8 @@ class ClassificationTask(pl.LightningModule):
         self.log('test_loss', loss, prog_bar=True, logger=True, sync_dist=True)
         return loss
 
-    # def lr_scheduler_step(self, scheduler, metric):
-    #     scheduler.step_update(num_updates=self.global_step)
-
     def configure_optimizers(self):
-        if self.hparams.optimizer.optim == 'AdamW':
-            optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.hparams.optimizer.lr)
+        optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.hparams.optimizer.lr)
 
         scheduler = hydra.utils.instantiate(self.hparams.scheduler, optimizer)
         lr_scheduler_config = {

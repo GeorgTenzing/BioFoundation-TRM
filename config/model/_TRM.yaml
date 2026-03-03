@@ -1,7 +1,5 @@
 # @package _global_ 
 model:
   _target_: models._TRM.TCN
-  num_classes: 4
-
-
     # _target_: models._TRM.TRM
+  # num_classes: 4
