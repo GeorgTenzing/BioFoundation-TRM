@@ -1,6 +1,10 @@
 #@package _global_
 tag: trm_basicmotions_sanitycheck
 
+classification_type: "mcc"
+final_validate: True
+final_test: True
+
 io:
   checkpoint_dirpath: ${env:CHECKPOINT_DIR}/checkpoints
   base_output_path: ${env:DATA_PATH}/outputs
@@ -19,6 +23,7 @@ optimizer:
   lr: 1e-4
 
 trainer:
+  accelerator: auto 
   max_epochs: 5
   log_every_n_steps: 1
   val_check_interval: 1.0 # controls whether to use epoch-based or step-based training
@@ -27,8 +32,6 @@ trainer:
 model:
   num_classes: 4
 
-classification_type: "mcc"
-
 model_checkpoint:
-  monitor: "val_loss"
-  mode: "min"
+  monitor: "val_MulticlassAccuracy"
+  mode: "max"

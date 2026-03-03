@@ -141,7 +141,9 @@ def train(cfg: DictConfig):
 
     if cfg.final_validate:
         print("===> Start validation")
-        trainer.validate(model, data_module, ckpt_path=best_ckpt)
+        # trainer.validate(model, data_module, ckpt_path=best_ckpt)
+        # CHANGED
+        trainer.validate(model, data_module, ckpt_path=best_ckpt, weights_only=False)
 
     if cfg.final_test:
         # rank 0 only
@@ -182,7 +184,9 @@ def _run_test(
         devices=1,
     )
     print("===> Start testing")
-    test_results = trainer.test(module, datamodule=datamodule, ckpt_path=last_ckpt)
+    # test_results = trainer.test(module, datamodule=datamodule, ckpt_path=last_ckpt)
+    # Changed
+    test_results = trainer.test(module, datamodule=datamodule, ckpt_path=last_ckpt, weights_only=False)
     results["test_metrics"] = test_results
     return results, trainer
 
