@@ -1,0 +1,56 @@
+\documentclass[]{iisreport}
+
+\title{\LaTeX{} Report Template}
+
+% \author{Your Name}
+% \email{nethzname@student.ethz.ch}
+%
+% \semester{Fall Semester 2017}
+% \date{Date of thesis hand-in}
+% \reporttype{Semester Project / Master Thesis}
+%
+% \professor{Prof.\ Dr.\ G.\ Leader, leader@iis.ee.ethz.ch}
+% \advisor{Johnny Phdstud, johnnyp@iis.ee.ethz.ch}
+% \advisor{Laura Postdoc, lpostdoc@iis.ee.ethz.ch}
+
+\titlelogo{titlepage_logo}
+\titlelogoheight{7cm}
+
+\begin{document}
+
+\frontmatter
+
+\input{src/abstract}
+\input{src/acknowledgments}
+\input{src/authorship}
+
+\tableofcontents
+
+\mainmatter
+
+\input{src/introduction}
+\input{src/background}
+\input{src/related_work}
+\input{src/implementation}
+\input{src/results}
+\input{src/conclusion}
+
+\appendix
+
+\input{src/appendices/specific_guidelines}  % TODO: Remove these two appendices when you no longer need
+\input{src/appendices/latex_guide}          % their guidelines.
+\input{src/appendices/task_description}
+
+\backmatter
+
+\input{acr/main.tex}
+\input{acr/latex_and_writing.tex} % TODO: Remove this line when you no longer need the writing guidelines.
+\listofacronyms
+
+\listoffigures
+\listoftables
+
+ % TODO: Remove the `latex_and_writing` bibliography when you no longer need that guide.
+\bibliography{./bib/main,./bib/latex_and_writing}
+
+\end{document}

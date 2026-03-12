@@ -1,0 +1,2 @@
+# Ignore all PDFs that are automatically generated from tracked source files.
+/functional_verification_tb.pdf

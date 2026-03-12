@@ -1,0 +1,43 @@
+# Backups of currently open files
+*~
+\#*#
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder
+.Trash-*
+
+# Temporary files that can be created when a process still has an open handle of a deleted file
+.fuse_hidden*
+.nfs*
+
+# LaTeX intermediate files
+*.acn
+*.acr
+*.alg
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.lof
+*.log
+*.lot
+*.maf
+*.mtc*
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+
+# Generated PDF and tar archive in this directory
+/*.pdf
+/*.tar.gz
+/*.zip

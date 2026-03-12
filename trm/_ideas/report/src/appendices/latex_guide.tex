@@ -1,0 +1,639 @@
+\chapter{Compact Guide to \LaTeX{} and the \textit{iisreport} Class}
+\label{app:LaTeX_guide}
+
+Writing a report with \LaTeX{} might at first not be as intuitive as with \gls{wysiwyg} editors.
+However, once you get used to the (rather simple) syntax, you will soon discover how powerful it is and how it helps you achieve tasks that are very difficult (if not impossible) to achieve with \gls{wysiwyg} editors.
+
+This report template provides everything you need to get you started working with \LaTeX{}.
+The rest of this chapter contains a short guide with examples for commonly used features.
+
+\section{Building the document}
+
+  Generate a \gls{pdf} file from this template by simply executing \texttt{make} in the directory where the top-level \texttt{.tex} file is in.
+  Internally, this will invoke the \texttt{latexmk} program, which is the simplest and most consistent way to build a \LaTeX{} document and is included in all recent \LaTeX{} distributions.
+  Additionally, \texttt{make} will check the \texttt{fig/} directory and generate \gls{pdf} files for those figure raw files it knows how to compile (more on this in~\cref{sec:LaTeX_figures}).
+
+\section{Text editing and spacing}
+
+  White spaces and line breaks are automatically inserted when the document is compiled.
+  For this, the number of spaces  between  two  words is irrelevant, but a different space length is automatically inserted after a period to make sentences better distinguishable.
+  If you write a period that does not end a sentence, e.g., when mentioning Prof.\ Dr.\ S.\ Body, you need to escape the spaces between the abbreviated words with a backslash \verb|\|.
+  If you want to prevent \LaTeX{} from breaking a line at a specific white space, you have to replace that space with a tilde \verb|~|.
+  \LaTeX{} also automatically hyphenates English words, so it can break a line within a word, although it does so only cautiously.
+  Automatic hyphenation can fail, e.g., for non-standard words, causing overly long lines.
+  In such cases you have two options:
+  First, if you have to break a standard word at an uncommon position, you can insert a \verb|\-| at that position in the word.
+  Second, you can define the hyphenation of a non-standard word by adding \verb|\hyphenation{Jab-ber-woc-ky}| to the preamble\footnote{%
+    The \emph{preamble} of a document is formed by all code between the \texttt{\textbackslash{}documentclass} command and the beginning of the document body after \texttt{\textbackslash{}begin\{document\}}.
+  } of your document.
+
+  A line of text is not broken at the same position as in the source code.
+  For this reason, we suggest you put one sentence on one line of source code because this allows your \gls{vcs} to track content changes much better than if you wrap lines within sentences.
+  To start a new paragraph, insert an empty line.
+  You can manually break a line by writing \verb|\\|; however, this is rarely necessary and wide usage of it is a sign of fighting the typesetting system.
+
+  By default in this template, paragraphs start with a short indentation and are not separated by vertical white space, but this can be changed.
+  If you prefer the latter, pass the \texttt{parskip} option to the \texttt{iisreport} document class, i.e., change the first line of your main document to \verb|\documentclass[parskip]{iisreport}|.
+
+  \subsection{Special characters}
+
+    Many special characters are available, and they are all listed in \textsl{The Comprehensive \LaTeX{} Symbol List}~\cite{LaTeXSymbols}.
+    At the beginning you might not know what to search for, though, so it can be more helpful to use the \textsl{Detexify}\footnote{\url{http://detexify.kirelabs.org/classify.html}} web app where you can draw the symbol you are looking for.
+
+    A frequent mistake is to mix up the three dashes (-, --, and ---).
+    The rules are simple~\cite{Knuth84}:
+    \begin{itemize}
+      \item The \emph{hyphen}, \verb|-|, is used between the elements of compound words; e.g., ``run-time''.
+      \item The \emph{en-dash}, \verb|--|, is used for ranges; e.g., ``3--7''.
+      \item The \emph{em-dash}, \verb|---|, is used for digressions within or at the end of a sentence---although you should use it sparingly.
+    \end{itemize}
+
+    Another frequent mistake are wrong quotation marks.
+    Fortunately, this can also easily be avoided:
+    Use \verb|`text'| for `single quotation marks' and \verb|``text''| for ``double quotation marks'' (have a look at the source code to see the matching pairs).
+    In American English, double quotes prevail and single quotes are typically only used inside double quotes.
+
+  \subsection{Font faces and emphasis}
+
+    The font face can be changed locally with the commands in \cref{tbl:font_face_commands}.
+    The text to appear differently has to be put between the curly braces \verb|{}|, i.e., the text is an \emph{argument} to one of the commands.
+    Some font faces can also be combined by nesting them.
+    For example, \verb|\textbf{\textit{some words}}| becomes \textbf{\textit{some words}}.
+
+    \begin{table}
+      \centerfloat
+      \begin{tabular}{ l l }
+        \toprule
+        \textbf{Command} & \textbf{Output} \\
+        \midrule
+        \verb|\textrm{}| & \textrm{Roman (the default in this document)} \\
+        \verb|\textsf{}| & \textsf{Sans serif} \\
+        \verb|\texttt{}| & \texttt{Typewriter (i.e., all characters have the same width)} \\
+        \verb|\textbf{}| & \textbf{Bold} \\
+        \verb|\textit{}| & \textit{Italic} \\
+        \verb|\textsl{}| & \textsl{Slanted} \\
+        \verb|\textsc{}| & \textsc{Small caps} \\
+        \bottomrule
+      \end{tabular}
+      \caption{Different font faces.}%
+      \label{tbl:font_face_commands}
+    \end{table}
+
+    When you want to \emph{emphasize} text, use the \verb|\emph{}| command instead of one of the commands in \cref{tbl:font_face_commands}.
+    In this way, you separate a \emph{property} of a piece of text (i.e., which text is emphasized) from its \emph{formatting} (i.e., how emphasized text looks like).
+    This is an important principle in typesetting with \LaTeX{}.
+    In this case, it allows you to define the formatting of all emphasized text independently of which text is meant to be emphasized.
+
+  \subsection{Font sizes}
+
+    The font size can be changed with the commands in \cref{tbl:font_sizes}.
+    These commands change the size within a given \emph{scope}; for instance \verb|{\Large some words}| only prints ``some words'' large.
+
+    \begin{table}
+      \newcommand{\sampletext}{quick brown foxes}
+      \centerfloat
+      \begin{tabular}{ l l }
+        \toprule
+        \textbf{Command} & \textbf{Output sample} \\
+        \midrule
+        \verb|\tiny|          & {\tiny \sampletext} \\
+        \verb|\scriptsize|    & {\scriptsize \sampletext} \\
+        \verb|\footnotesize|  & {\footnotesize \sampletext} \\
+        \verb|\small|         & {\small \sampletext} \\
+        \verb|\normalsize|    & {\normalsize \sampletext} \\
+        \verb|\large|         & {\large \sampletext} \\
+        \verb|\Large|         & {\Large \sampletext} \\
+        \verb|\LARGE|         & {\LARGE \sampletext} \\
+        \verb|\huge|          & {\huge \sampletext} \\
+        \verb|\Huge|          & {\Huge \sampletext} \\
+        \bottomrule
+      \end{tabular}
+      \caption{Different font sizes.}%
+      \label{tbl:font_sizes}
+    \end{table}
+
+  \subsection{Coloring text}
+
+    \begin{figure}
+      \centerfloat
+      \begin{minipage}{1.1\textwidth}
+        % Source: colors from `xcolor`, sorting by own implementation.
+        \def\0#1{\colorbox{#1}{\phantom{XX}}~#1\\}
+        \scriptsize
+        \begin{multicols}{5}
+          \noindent
+          \0{Magenta}
+          \0{Rhodamine}
+          \0{VioletRed}
+          \0{CarnationPink}
+          \0{Lavender}
+          \0{RubineRed}
+          \0{WildStrawberry}
+          \0{OrangeRed}
+          \0{Salmon}
+          \0{Maroon}
+          \0{Red}
+          \0{Mahogany}
+          \0{BrickRed}
+          \0{Melon}
+          \0{RedOrange}
+          \0{Sepia}
+          \0{Brown}
+          \0{Bittersweet}
+          \0{RawSienna}
+          \0{Peach}
+          \0{Orange}
+          \0{Tan}
+          \0{Apricot}
+          \0{BurntOrange}
+          \0{YellowOrange}
+          \0{Dandelion}
+          \0{Goldenrod}
+          \0{Yellow}
+          \0{GreenYellow}
+          \0{SpringGreen}
+          \0{LimeGreen}
+          \0{YellowGreen}
+          \0{OliveGreen}
+          \0{Green}
+          \0{ForestGreen}
+          \0{SeaGreen}
+          \0{PineGreen}
+          \0{JungleGreen}
+          \0{Emerald}
+          \0{TealBlue}
+          \0{BlueGreen}
+          \0{Aquamarine}
+          \0{Turquoise}
+          \0{SkyBlue}
+          \0{Cyan}
+          \0{ProcessBlue}
+          \0{Cerulean}
+          \0{MidnightBlue}
+          \0{CornflowerBlue}
+          \0{RoyalBlue}
+          \0{NavyBlue}
+          \0{CadetBlue}
+          \0{Periwinkle}
+          \0{Blue}
+          \0{BlueViolet}
+          \0{Violet}
+          \0{RoyalPurple}
+          \0{Purple}
+          \0{Fuchsia}
+          \0{Plum}
+          \0{Orchid}
+          \0{Mulberry}
+          \0{DarkOrchid}
+          \0{Thistle}
+          \0{RedViolet}
+        \end{multicols}
+        \begin{multicols}{5}
+          \noindent
+          \columnbreak
+          \0{black}
+          \0{darkgray}
+          \0{gray}
+          \0{lightgray}
+          \0{white}
+        \end{multicols}
+      \end{minipage}
+      \caption{Selected predefined colors, sorted by hue.}%
+      \label{fig:selected_colors}
+    \end{figure}
+
+    The color of text can be changed with the \verb|\textcolor| and \verb|\color| commands:
+    The former takes two arguments, a declared color and the text to color.
+    For example, \verb|\textcolor{RoyalBlue}{I am royal}| becomes \textcolor{RoyalBlue}{I am royal}.
+    The latter takes only a defined color and colors all text in its scope.
+    For example, \verb|{\color{RoyalPurple}So am I}| becomes {\color{RoyalPurple}So am I}.
+
+    \Cref{fig:selected_colors} shows a selection of predefined colors.
+    The \texttt{xcolor} package manual~\cite{xcolor} lists more colors and describes how to define custom colors.
+
+\section{Debugging}
+
+  Occasionally, you will make syntax mistakes while writing a document, causing compilation to fail.
+  In this case, the last lines of the console output will mention an error and point you to a \texttt{.log} file in the directory where you ran \texttt{make}.
+  Open that log file.
+  Even though that file can be very long and contains many technical details that are of no interest to you, finding errors is easy: simply search for lines starting with an exclamation mark!
+
+  If you use an undefined command, e.g., due to a typo, the error messages should be very helpful.
+  If, however, you cause parentheses or environment delimiters to mismatch, the position of your mistake is hard to derive from the error messages.
+
+  A good technique to locate a mistake is to comment out recent changes until the document compiles neatly again.
+  For recompilation, you should use \texttt{make clean all} to prevent errors that crept into temporary files from disturbing your bug hunt.
+  To reduce compilation time for large documents, you can comment out chapters that are known to be good.
+  When you have a working version again, re-enable the code you commented out last piece-by-piece.
+  This piecewise reduction should help you systematically find the mistake.
+
+\section{Math mode}
+
+  \LaTeX{} is probably the most powerful and elaborate tool to typeset mathematical content.
+  Once you know a few core concepts, writing properly formatted mathematical content becomes quite simple.
+
+  To distinguish maths from regular text, maths is written in \emph{math mode}.
+  There are two categories that differ in their presentation: inline and displayed.
+  Inline maths, e.g., $ a\sp{2} + b\sp{2} = c\sp{2} $ is enclosed in \verb|$| signs.
+  It is meant for simple expressions.
+  More complex content is displayed separately from the text.
+  The most common way to display maths is inside the \texttt{equation} environment\footnote{%
+    \emph{Environments} in \LaTeX{} are similar to commands, but are usually used for larger chunks of code.
+    For example, the entire document except the preamble is inside the \texttt{document} environment.
+    Environments are formed with \texttt{\textbackslash{}begin\{environmentname\}} \texttt{...} \texttt{\textbackslash{}end\{environmentname\}}.
+  }, for example:
+  \begin{equation}
+    \int\sb{-\infty}\sp{\infty} x \dif x = 0.
+  \end{equation}
+
+  Subscripts are written with \verb|\sb{}|\footnote{%
+    By default, \LaTeX{} would allow to use the underscore \texttt{_} for subscripts.
+    In the \texttt{iisreport} document class, however, the underscore is a regular, printable character.
+    The rationale is that the underscore is very common in technical designators and having to escape every single one is a common source of errors.
+  }, superscripts with \verb|\sp{}|, integrals with \verb|\int|, and sums with \verb|\sum|.
+  Have a look at the source code of the last paragraph for usage examples.
+
+  Equations get a number by default, so you can label and refer to them (more on this in \cref{sec:cite_and_reference}).
+  If you want to suppress an equation number, you can use the \emph{starred} version of the equation environment, i.e., \verb|equation*|.
+
+  Many mathematical symbols and functions are predefined, letting you express relations such as $ \forall x \in \mathbb{R} $ $ \exists n \in \mathbb{N}: \ldots $ fluently.
+  Wikipedia\footnote{\url{https://en.wikibooks.org/wiki/LaTeX/Mathematics\#List_of_Mathematical_Symbols}} has a list of all predefined mathematical symbols.
+
+  Variable names are by default one character long, causing \verb|$ xy z $| to be typeset with identical spacing as \verb|$ xyz $|.
+  You should thus use single-letter variables whenever possible.
+  If you have to use multi-letter variables, write them inside the \verb|\var{}| command\footnote{%
+    The \texttt{var} command is not standard \LaTeX{} but defined by the \texttt{iisreport} document class.
+    If you want to use it elsewhere, it is very simple to implement: \url{https://tex.stackexchange.com/a/129434/92384}.
+  }.
+  This causes $ x $ and $ y $ in the two-letter variable $ \var{xy} $ to be closer together.
+  To make the variable clearly distinguishable from the next one, however, you may still have to insert a space\footnote{%
+    The most common horizontal spacing macros in math mode are (in increasing order):
+    \texttt{\textbackslash{},}, \texttt{\textbackslash{};}, \texttt{\textbackslash{}enspace}, \texttt{\textbackslash{}quad}, and \texttt{\textbackslash{}qquad}.
+    A complete list with examples is available here: \url{https://tex.stackexchange.com/a/74354/92384}.
+    Keep in mind that frequent insertion of manual spacing may be a hack around a more fundamental problem.
+  } (as in $ \var{xy} \, z $) or even an operator (as in $ \var{xy} \cdot z $).
+
+  When you want to use text in math mode (subscripts are a common use case for this), you must write that text inside the \verb|\text{}| command to avoid the same problems as with multi-letter variables.
+
+  \subsection{Delimiters: Parentheses, brackets, bars, and intervals}
+
+    For simple parentheses and square brackets, you can readily use the \texttt{()} and \texttt{[]} characters, respectively.
+    Curly braces are a bit more involved because \verb|{}| are grouping characters.
+    Thus, you would have to escape them and write \verb|\{\}| instead.
+    However, we recommend to use the \verb|\cbr{}| command (short for ``curly braces'') instead.
+    That command has the additional advantage of automatically sizing parentheses to the content.
+    (The automatic sizing can be disabled by passing \verb|[0]| as optional first argument to the command.)
+    If you need automatically sized parentheses and square brackets, the commands are \verb|\del{}| (for ``delimiter'') and \verb|\sbr{}| (for ``square bracket''), respectively.
+    This allows you to effortlessly maintain readability even in deeply nested equations:
+    \begin{equation}
+      \del{E\sbr{\min\cbr{X\sb{1}, X\sb{2}}} - \del{\pi - \arccos\del{\frac{y}{r}}}}\sp{n}.
+    \end{equation}
+
+    Absolute values are written with \verb|\abs{}|, e.g.,
+    \begin{equation}
+      \abs{\exp\del{x \pi i}} = 1 \quad\forall x \in \mathbb{R},
+    \end{equation}
+    while vector norms are written with \verb|\norm{}|, e.g.,
+    \begin{equation}
+      \norm{\vec{x}}\sb{2} = \sqrt{\sum\sb{k=1}\sp{n} x\sb{k}\sp{2}} \quad\forall \vec{x} \in \mathbb{R}\sp{n},
+    \end{equation}
+    where the vector $ \vec{x} $ was written with \verb|\vec{x}| and the square root with \verb|sqrt{..}|.
+
+    Intervals are written with the \verb|\intxy{}| commands, where each of \texttt{x} and \texttt{y} are either \texttt{o} for open or \texttt{c} for closed.
+
+  \subsection{Differential and derivative operators}
+
+    Differential and derivative operators are written with the following commands:
+    \verb|\dif x| is the simple differential operator, e.g., $ \dif x $.
+    \verb|\Dif x| is a derivative operator, e.g., $ \Dif x $.
+    \verb|\od[n]{f}{x}| is the ordinary $n$-th derivative operator, e.g., $ \od[n]{f}{x} $.
+    \texttt{n} is optional and should be omitted for the first derivative.
+    \verb|\pd[n]{f}{x}| is the partial $n$-th derivative operator, e.g., $ \pd[n]{f}{x} $.
+    Finally, \verb|\md{f}{n}{x}{q}{y}{r}| is the mixed partial derivative operator, e.g., $ \md{f}{n}{x}{q}{y}{r} $, where \texttt{n} is the total order of differentiation and \texttt{q} and \texttt{r} are the orders of differentiation for \texttt{x} and \texttt{y}, respectively.
+
+  \subsection{Vectors, matrices, and distinction of cases}
+
+    Both vectors and matrices are written with the \texttt{Xmatrix} environments, where \texttt{X} defines the delimiter of the matrix and can be \texttt{p} for parentheses, \texttt{b} for brackets, \texttt{B} for curly braces, \texttt{v} for vertical bars, \texttt{V} for double vertical bars, or omitted for no delimiters.
+    The matrix is written row-wise with the elements of a row separated by \verb|&| and each row is terminated by \verb|\\|.
+    A column vector is just a matrix with one column, a row vector one with one row.
+    For example:
+    \begin{equation}
+      x = \begin{pmatrix}
+        x\sb{1} & x\sb{2} \\
+      \end{pmatrix}
+      \quad
+      y = \begin{pmatrix}
+        y\sb{1} \\
+        y\sb{2} \\
+      \end{pmatrix}
+      \quad
+      A = \begin{pmatrix}
+        a\sb{1,1} & a\sb{1,2} \\
+        a\sb{2,1} & a\sb{2,2} \\
+      \end{pmatrix}
+    \end{equation}
+
+    The \texttt{Xmatrix} environments center the columns by default.
+    If you want a different alignment, use the starred variant\footnote{%
+      The \emph{starred variant} of an environment or a command simply has a star \texttt{*} at the end of the environment or command name, respectively.
+      Not all environments and commands have a starred variant.
+    } of the environments, which accepts a single character as optional argument\footnote{%
+      \emph{Optional arguments} are always enclosed in square brackets \texttt{[]}.
+    }: \texttt{r} for right, \texttt{c} for center, and \texttt{l} for left.
+
+    To write case distinctions, use the \texttt{dcases} environment.
+    For example:
+    \begin{equation}
+      a(v) =
+      \begin{dcases}
+        0             & \text{if } v \geq \mathrm{c}, \\
+        \epsilon > 0  & \text{else}.
+      \end{dcases}
+    \end{equation}
+    If you want the curly brace to be on the right of the cases, use the \texttt{rcases} environment.
+
+  \subsection{Multi-line equations}
+
+    If you want to write a single equation that is longer than one line, use the \texttt{multline} (without `i'!) environment.
+    That environment switches to math mode by itself, so you \emph{must not} use it inside \texttt{equation}.
+    Use the line break command, \verb|\\|, to define the two lines of the equation.
+    For example:
+    \begin{multline}
+      \alpha + \beta + \gamma + \delta + \epsilon + \zeta + \eta + \theta + \iota + \kappa + \lambda + \mu + \nu + \xi + + \pi + \rho + \sigma + \tau \\
+       = \upsilon + \phi + \chi + \psi + \omega.
+    \end{multline}
+
+    To write multiple equations in series or an especially complicated multi-line equation, use the \texttt{IEEEeqnarray} environment.
+    That environment takes a series of characters specifying the columns as argument.
+    The most common argument is \texttt{rCl}, meaning one right-aligned column followed by a center-aligned separator followed by a left-aligned column.
+    As with matrices, use \verb|&| to separate columns and \verb|\\| to separate equation lines.
+    For example:
+    \begin{IEEEeqnarray}{rCl}
+      a & = & b + c \\
+        & = & d + e + f + g + h + i + j + k \nonumber\\
+        &   & +\> l + m + n + o \\
+        & = & p + q + r + s,
+    \end{IEEEeqnarray}
+    where the first line of the second equation was ended by \verb|\nonumber| to suppress numbering that part of the equation.
+
+    Browse through \textsl{How to Typeset Equations in \LaTeX{}}~\cite{LaTeXEquations} for further informations and solutions to more complex examples.
+
+  \subsection{Definitions, theorems, lemmas, and proofs}
+
+    Here are some examples on writing definitions, theorems, lemmas, and proofs.
+
+    \begin{definition}[Singularity]
+      Let $ U $ be an open subset of the complex numbers $ \mathbb{C} $, $ a \in U $, and $ f $ be a complex differentiable function defined on $ U \setminus \cbr{a} $.
+
+      The point $ a $ is a \emph{removable singularity} of $ f $ if there exists a holomorphic function $ g $ defined on all of $ U $ such that $ f(z) = g(z) \>\forall z \in U \setminus \cbr{a} $.
+
+      The point $ a $ is a \emph{pole} or \emph{non-essential singularity} of $ f $ if there exists a holomorphic function $ g $ defined on $ U $ with $ g(a) \neq 0 $ and $ n \in \mathbb{N} $ such that
+      \begin{equation}
+         f(z) = \frac{g(z)}{(z - a)\sp{n}} \quad\forall z \in U \setminus \cbr{a}.
+      \end{equation}
+      The lowest such number $ n $ is called the \emph{order of the pole}.
+
+      The point $ a $ is an \emph{essential singularity} of $ f $ if it is neither a removable singularity nor a pole.
+      The point $ a $ is an essential singularity iff the Laurent series has infinitely many powers of negative degree.
+    \end{definition}
+
+    \begin{theorem}[Residue Theorem]
+      Let $ f $ be analytic in the region $ G $ except for the isolated singularities $ a\sb{1} $, $ a\sb{2} $, \ldots, $ a\sb{m} $.
+      If $ \gamma $ is a closed rectifiable curve in $ G $ that does not pass through any of the points $ a\sb{k} $ and if $ \gamma \approx 0 $ in $ G $, then
+      \begin{equation}
+        \frac{1}{2 \pi i} \int\sb{\gamma} f = \sum\sb{k = 1}\sp{m} n(\gamma; a\sb{k}) \,\text{Res}(f; a\sb{k}).
+      \end{equation}
+    \end{theorem}
+
+    \begin{proof}
+      Left as an exercise for the reader.
+    \end{proof}
+
+    \begin{lemma}[Schwarz]
+      Let $ D \coloneqq \cbr{z \in \mathbb{C}: \abs{z} < 1} $ be the open unit disk in the complex plane centered at the origin, and let $ f: D \to \mathbb{C} $ be a holomorphic map such that $ f(0) = 0 $ and $ \abs{f(z)} \leq 1 $ on $ D $.
+      Then, $ \abs{f(z)} \leq \abs{z} \>\forall z \in D $ and $ \abs{f'(0)} \leq 1 $.
+      Moreover, if $ \abs{f(z)} = \abs{z} $ for some $ z \neq 0 $ or $ \abs{f'(0)} = 1 $, then $ f(z) = a z $ for some $ a \in \mathbb{C} $ with $ \abs{a} = 1 $.
+    \end{lemma}
+
+    \begin{proof}
+      Beyond the scope of this document.
+    \end{proof}
+
+\section{Quantities with SI units}
+
+  \begin{itemize}
+    \item quantity with a unit: \SI{300}{\mega\hertz}
+    \item unit alone: \si{\giga\volt}
+    \item ranges of quantities with units: \SIrange{2}{256}{\mebi\bit\per\second}
+    \item number (especially for engineering notation or very large numbers): \num{10000}, \num{3.14e6}, \num{5e-12}
+    \item ranges of numbers \numrange{5e-12}{3.14e6}
+  \end{itemize}
+
+  Math mode not required, but can be used with it.
+
+\section{Enumerations and itemizations}
+
+  Itemizations are \ldots
+  \begin{itemize}
+    \item unnumbered and
+    \item written inside the \texttt{itemize} environment, where every item starts with \verb|\item|.
+  \end{itemize}
+
+  Enumerations, on the other hand, are \ldots
+  \begin{enumerate}
+    \item numbered and
+    \item written inside the \texttt{enumerate} environment.
+  \end{enumerate}
+
+  Both itemizations and enumerations can be nested.
+  The indentation level and itemization items are then automatically adjusted:
+  \begin{enumerate}
+    \item This demonstrates that
+    \begin{enumerate}
+      \item enumerations and
+      \item itemizations
+      \begin{itemize}
+        \item can be nested.
+      \end{itemize}
+    \end{enumerate}
+  \end{enumerate}
+
+\section{Floats: figures and tables}
+\label{sec:LaTeX_figures}
+
+  Both figures and tables normally form \emph{floating} environments.
+  This means that \LaTeX{} will automatically place them near to where they were in the source code, but not at the exact same position.
+  The placement algorithm is fairly sophisticated~\cite{LaTeXFloatPlacement} and usually works reasonably well.
+
+  The base environment for figures is \texttt{figure}, the one for tables is \texttt{table}.
+  Floats usually get a caption with the \verb|\caption{}| command.
+  If you want to refer to them (more on this in \cref{sec:cite_and_reference}), you additionally have to put a \verb|\label{}| after the \verb|\caption{}| but on the same line (to have correct page numbers even near page breaks).
+
+  To center-align the content of a float, use the \verb|\centerfloat| command at the beginning of that float.
+
+  \subsection{Figures}
+
+    Images can be included with the \verb|\includegraphics[properties]{file_name}| command, where \texttt{properties} allows to, e.g., define the \texttt{width}, \texttt{height}, or \texttt{scale} of an image in the \texttt{key=value} syntax.
+    The \texttt{file_name} is relative to the \texttt{fig/} directory and the default suffix, \texttt{.pdf}, can be omitted.
+    An example figure is given in \cref{fig:example_figure}.
+
+    \begin{figure}
+      \centerfloat
+      \includegraphics[width=5cm]{eth_logo}
+      % Note: We do not have the SVG source file for the image above, so we have to put the PDF under version control.
+      \caption{Example figure.}%
+      \label{fig:example_figure}
+      % Note: The `\label{}` can be on the line after the `\caption{}` if the `\caption{}` line ends with a comment.
+    \end{figure}
+
+    Whenever possible, you should use \glspl{svg} for two reasons:
+    First, they can be scaled losslessly to the target size and resolution.
+    Second, they allow you to keep a small, modifiable source file of the graphic under version control and have the \gls{pdf} file to be included built automatically.
+
+    We recommend using \textsl{Inkscape}\footnote{Freely available at \url{https://inkscape.org}.}.
+    Simply draw a figure in Inkscape, set the canvas to where you want the image border, save the original \texttt{.svg} file in the \texttt{fig/} directory, and use \verb|\includegraphics| on the file name without suffix.
+    When you run \texttt{make}, the corresponding \gls{pdf} file will get built automatically and included in your document.
+    If you use a \gls{vcs} (we highly recommend to do so!), track the original \texttt{.svg} file but add the auto-built \texttt{.pdf} file to the ignore list (e.g., \texttt{fig/.gitignore}).
+    If you include \gls{pdf} files of which you have no source files, track that \texttt{.pdf} file in your \gls{vcs}.
+
+    As Inkscape does not support embedding fonts in its \gls{svg} files, you should either only use standard, widely-available fonts\footnote{\href{https://www.w3schools.com/cssref/css_websafe_fonts.asp}{Web safe fonts} are good candidates for widely available fonts.} or track the auto-built \gls{pdf} images in \texttt{fig/} with your \gls{vcs}.
+    If you choose the latter, though, be aware that other collaborators who do not have the font installed must not commit changes to the built \gls{pdf} images (because text with missing fonts will be rendered incorrectly by their Inkscape).
+
+  \subsection{Tables}
+
+    \begin{table}
+      \centerfloat
+      \begin{tabular}{ r r r r }
+        \toprule
+        \textbf{Decimal} & \textbf{Hexadecimal} & \textbf{Octal} & \textbf{Binary} \\
+        \midrule
+        10 & $ \mathtt{A}\sb{16} $ & $ \mathtt{12}\sb{8} $ & $ \mathtt{1010}\sb{2} $ \\
+        13 & $ \mathtt{D}\sb{16} $ & $ \mathtt{15}\sb{8} $ & $ \mathtt{1101}\sb{2} $ \\
+        \bottomrule
+      \end{tabular}
+      \caption{Simple example table with some values in different number systems.}%
+      \label{tbl:sample_number_systems}
+    \end{table}
+
+    \begin{table}
+      \centerfloat
+      \rowcolors{2}{lightgray}{white}
+      \begin{tabular}{ c c c }
+        \toprule
+        \textbf{Some} & \textbf{title} & \textbf{words} \\
+        \midrule
+        odd   & odd & odd \\
+        even  & \cellcolor{darkgray}\color{white} even  & even  \\
+        odd   & odd & odd \\
+        \bottomrule
+      \end{tabular}
+      \caption{Simple example table with different row and cell colors.}%
+      \label{tbl:sample_colors}
+    \end{table}
+
+    \begin{table}
+      \centerfloat
+      \begin{tabular}{ l p{1.5cm} p{1.5cm} p{7cm} }
+        \toprule
+        \textbf{Day} & \textbf{Min.\ Temp.} & \textbf{Max.\ Temp.} & \textbf{Description} \\
+        \midrule
+        Monday  & \SI{11}{\degreeCelsius} & \SI{22}{\degreeCelsius} & A clear day with lots of sunshine. However, a strong breeze will bring down the temperatures. \\
+        Tuesday & \SI{9}{\degreeCelsius}  & \SI{19}{\degreeCelsius} & Cloudy with rain across many northern regions.  Clear spells across most of Scotland and Northern Ireland, but rain reaching the far northwest. \\
+        \bottomrule
+      \end{tabular}
+      \caption{%
+        Example table with fixed column widths: \SI{1.5}{\centi\meter} for columns two and three, \SI{7}{\centi\meter} for column four.
+        Content adopted from \href{https://en.wikibooks.org/wiki/LaTeX/Tables\#Text_wrapping_in_tables}{Wikibooks}.
+      }%
+      \label{tbl:fixed_width_columns}
+    \end{table}
+
+\section{Algorithms and source code listings}
+
+  \Cref{alg:disjoint_decomposition} shows an example algorithm.
+  Have a look at the source code to discover how it works.
+
+  \begin{algorithm}
+    \SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+    \SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+    \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+
+    \Input{A bitmap $Im$ of size $w\times l$}
+    \Output{A partition of the bitmap}
+    \BlankLine
+    \emph{special treatment of the first line}\;
+    \For{$i\leftarrow 2$ \KwTo $l$}{
+      \emph{special treatment of the first element of line $i$}\;
+      \For{$j\leftarrow 2$ \KwTo $w$}{\label{forins}
+        \Left$\leftarrow$ \FindCompress{$Im[i,j-1]$}\;
+        \Up$\leftarrow$ \FindCompress{$Im[i-1,]$}\;
+        \This$\leftarrow$ \FindCompress{$Im[i,j]$}\;
+        \If(\tcp*[h]{O(\Left,\This)==1}){\Left compatible with \This}{\label{lt}
+          \lIf{\Left $<$ \This}{\Union{\Left,\This}}
+          \lElse{\Union{\This,\Left}}
+        }
+        \If(\tcp*[f]{O(\Up,\This)==1}){\Up compatible with \This}{\label{ut}
+          \lIf{\Up $<$ \This}{\Union{\Up,\This}}
+          \tcp{\This is put under \Up to keep tree as flat as possible}\label{cmt}
+          \lElse{\Union{\This,\Up}}\tcp*[r]{\This linked to \Up}\label{lelse}
+        }
+      }
+      \lForEach{element $e$ of the line $i$}{\FindCompress{p}}
+    }
+    \caption{Disjoint decomposition.}%
+    \label{alg:disjoint_decomposition}
+  \end{algorithm}
+
+  Source code listings are written inside the \texttt{lstlisting} environment, which takes optional arguments such as the \texttt{language} of the code, a \texttt{caption}, and a \texttt{label} in \verb|key=value| syntax.
+  \Cref{lst:simple_C} shows an example listing.
+
+  \begin{lstlisting}[language=C, caption={Simple C code snippet.}, label={lst:simple_C}]
+    int main()
+    {
+      return 0;
+    }
+  \end{lstlisting}
+
+  External source code files can be included as listing with the \verb|\lstinputlisting{}| command.
+  Since you rarely want to include an entire file, you can specify the first and the last line with the \texttt{firstline} and the \texttt{lastline} key, respectively.
+
+\section{Citing and referencing}
+\label{sec:cite_and_reference}
+
+  Use the \verb|\cref{}| command to reference a document-internal label.
+  Use the \verb|\cite{}| command to cite an entry in the bibliography.
+  You should always use a nonbreaking space, \verb|~|, before the \verb|\cite{}| command to prevent the citation label from falling to the next line.
+
+\section{Printing and binding}
+
+  When printing this document, pass the \texttt{print} option to the \texttt{iisreport} class.
+  This will cause the layout to be optimized for printing.
+
+\section{Further reading}
+
+  For a guide on writing research reports, we recommend the \textsl{Manual for Writers of Research Papers, Theses, and Dissertations}~\cite{Turabian13}.
+  Furthermore, \textsl{The Elements of Style}~\cite{Strunk12} and \textsl{The Chicago Manual of Style}~\cite{ChicagoManualOfStyle} are useful guides on concise writing in general.
+  The latter is freely available online within the ETH network.\footnote{\url{http://www.chicagomanualofstyle.org}}
+
+  If you are interested to learn more about \LaTeX{}, you will find many resources online but the majority of them are written by casual amateurs and can teach you bad practices.
+  Their approach is not strictly wrong but in the long term can cost you a lot of time compared to proper solutions.
+  Thus, let us suggest to start all your \TeX{}-related searches at the \TeX{} StackExchange\footnote{\url{https://tex.stackexchange.com/}} community.
+  Especially in the beginning, you will encounter common problems, for which there are usually several high-quality solutions on StackExchange, complete with an explanation of why the problem arose.
+
+  There are also some very good books on \LaTeX{}.
+  \textsl{The Not So Short Introduction to \LaTeX2e{}}~\cite{LaTeXIntroduction} is an excellent start, and \textsl{More Math into \LaTeX{}}~\cite{Graetzer16} teaches \SI{99}{\percent} of what you need to know about typesetting maths.
+  The first book\footnote{\url{http://tobi.oetiker.ch/lshort/lshort.pdf}} and the first section of the second book\footnote{\url{http://www.ctan.org/tex-archive/info/Math_into_LaTeX-4/Short_Course.pdf}} are freely available online.
+  For more advanced users, \textsl{The \LaTeX{} Companion}~\cite{Mittelbach04} and the \textsl{The \TeX{}book}~\cite{Knuth84} are the definitive books.
+
+\section{\textit{iisreport} options quick reference}
+
+  The \textit{iisreport} document class offers a few options that allow you to easily customize the layout of your report and configure certain features.
+  Options can be specified inside the square brackets on the first line of the \texttt{report.tex} file, with individual options separated by commas.
+  Here is an overview of all available options in alphabetic order:
+
+  \begin{itemize}[itemsep=0pt]
+    \item \texttt{oldfonts} brings back the fonts from the legacy \acrshort{iis} report template.
+    \item \texttt{oldsubscript} disables making the underscore printable and makes it usable for subscripts instead.
+    \item \texttt{parskip} causes paragraphs to start with a vertical space of half a line instead of indentation.
+    \item \texttt{print} optimizes the page layout for printing and binding.
+  \end{itemize}
